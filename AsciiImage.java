@@ -11,7 +11,8 @@ public class AsciiImage {
   private int width;
   private int height;
   
-  //Constructor
+  
+  //Constructors
   public AsciiImage(int width, int height) {
     this.pixel = new char[width][height];
     for (int i = 0; i < width; i++) {
@@ -22,8 +23,56 @@ public class AsciiImage {
     }
   }
   
+  public AsciiImage(Image image, int maxDimension) {
+    
+  }
+  
+  public AsciiImage(Image image) {
+    
+  }
   
   
+  //Functions
+  public int getWidth() {
+    return this.width;
+  }
+  
+  public int getHeight() {
+    return this.height;
+  }
+  
+  public char getPixel(int row, int col) {
+    return this.pixel[row][col];
+  }
+  
+  public void setPixel(int row, int col, char value) {
+    //Check to ensure char value is a valid value that can be used
+    for(int i = 0; i < shades.length; i++) {
+      if(value == shades[i]) {
+	//Check to ensure row and col are within a valid bound
+	if(row < 0 || row > this.width) {
+	  return;
+	}
+	else if(col < 0 || row > this.height) {
+	  return;
+	}
+	//Finally, set the pixel if nothing fails
+	else {
+	  this.pixel[row][col] = value;
+	  return;
+	}
+      }
+    }
+  }
+  
+  public Image getImage() {
+    Image justToGetThisToCompile = new Image(this.width, this.height);
+    return justToGetThisToCompile;
+  }
+  
+  public String toString() {
+    return "";
+  }
   
   
   
