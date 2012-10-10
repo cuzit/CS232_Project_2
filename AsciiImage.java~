@@ -13,8 +13,7 @@ public class AsciiImage {
   private static final char[] shades = {'#', '$', '@', 'O', 'o', 
 					'+', '-', ':', '.', '`', ' '};
   
-  public char[][] pixel; //REMEMBER THAT THIS NEEDS TO BE PRIVATE
-			  //I'M MAKING IT TEMPORARILY PUBLIC FOR DEBUGGING
+  private char[][] pixel;
   private int width;
   private int height;
   
@@ -59,6 +58,10 @@ public class AsciiImage {
       }
     }
     
+    //Sets the width and height variables
+    this.width = ascii.getWidth();
+    this.height = ascii.getHeight();
+    
   }
   
   //Constructor called when only an Image is passed, with no declared
@@ -76,6 +79,10 @@ public class AsciiImage {
 	/*Debugging*/ System.out.println("pixel[" + i + "][" + j + "]: " + this.pixel[i][j]);
       }
     }
+    
+    //Sets the width and height variables
+    this.width = ascii.getWidth();
+    this.height = ascii.getHeight();
   }
   
   
@@ -105,7 +112,7 @@ public class AsciiImage {
   //see shade array) to the value passed.
   public void setPixel(int row, int col, char value) {
     //Check to ensure char value is a valid value that can be used
-    for(int i = 0; i < shades.length; i++) {
+    /*for(int i = 0; i < shades.length; i++) {
       if(value == shades[i]) {
 	//Check to ensure row and col are within a valid bound
 	if(row < 0 || row > this.width) {
@@ -120,16 +127,45 @@ public class AsciiImage {
 	  return;
 	}
       }
-    }
+    }*/
+    
+    pixel[row][col] = value;
   }
   
+  
+    /****************
+    *Other Functions*
+    *****************/
   public Image getImage() {
-    Image justToGetThisToCompile = new Image(this.width, this.height);
-    return justToGetThisToCompile;
+    //Image justToGetThisToCompile = new Image(this.width, this.height);
+    //return justToGetThisToCompile;
+    Image newImage = new Image(this.width, this.height);
+    
+    for (int i = 0; i < this.width; i++) {
+      for (int j = 0; j < this.height; j++) {
+	for(int k = 0; k < this.shades.length; k++) {
+	  if (shades[k] == this.getPixel(i, j)) {
+	    newImage.setPixel(i, j, ((k * 255) / (this.shades.length -1 )));
+	  }
+	}
+      }
+    }
+    
+    return newImage;
   }
   
   public String toString() {
-    return "";
+    String asciiString = "";
+    /*Debugging:*/ System.out.println("toString executing.");
+    for (int i = 0; i < this.width; i++) {
+      for(int j = 0; j < this.height; j++) {
+	asciiString = asciiString + this.getPixel(i, j);
+	/*Debugging:*/ System.out.println("asciiString in for loop.");
+      }
+      /*Debugging:*/System.out.println("asciiString so far:\n" + asciiString);
+      asciiString += "\n";
+    }
+    return asciiString;
   }
   
   
@@ -140,18 +176,12 @@ public class AsciiImage {
   public static void main (String[] args) {
     //This is just for testing and should not be called by other processes.
     System.out.println("Debugging:");
-    System.out.println("Printing contents of pixel[][] array: ");
-    int height = 100;
-    int width = 100;
-    //AsciiImage debugtest = new AsciiImage(height, width);
+    int height = 10;
+    int width = 10;
     Image debugImage = new Image(height, width);
-    AsciiImage debugtest = new AsciiImage(debugImage, 20);
-    /*
-    for (int i = 0; i <= width; i++) {
-      for (int j = 0; j <= height; j++) {
-	System.out.println("[" + i + "][" + j + "]: "/*Pixels should output here);
-      }
-    }*/
+    AsciiImage debugtest = new AsciiImage(debugImage);
+    System.out.println("toString returns: " + debugtest.toString());
+    System.out.println("getPixel(5, 5) returns: " + debugtest.getPixel(5, 5));
   }
 
 }
