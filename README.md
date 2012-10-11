@@ -1,4 +1,4 @@
-Version 0.1: This Readme file is temporary. Please feel free to make
+Version 0.8: This Readme file is temporary. Please feel free to make
 modifications (but don't remove any existing text!').
 
 Roles:

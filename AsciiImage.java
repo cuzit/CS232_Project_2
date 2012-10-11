@@ -3,16 +3,12 @@
 *Programmed by Matt Silvey *
 *CS232 - Garrett           *
 ****************************/
-import java.io.*;
-
 
 public class AsciiImage {
   /***********
   *Attributes*
   ************/
-  private static final char[] shades = {'#', '$', '@', 'O', 'o', 
-					'+', '-', ':', '.', '`', ' '};
-  
+  private static final char[] shades = {'#', '$', '@', 'O', 'o', '+', '-', ':', '.', '`', ' '};
   private char[][] pixel;
   private int width;
   private int height;
@@ -24,11 +20,12 @@ public class AsciiImage {
   //Default constructor. Constructs an empty array of pixels of the darkest
   //shade of the specified width and height.
   public AsciiImage(int width, int height) {
-    this.pixel = new char[width][height];
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-	this.pixel[i][j] = this.shades[0];
-	/*Debugging:*/ System.out.println("pixel[" + i + "][" + j + "]: " + this.pixel[i][j]);
+    this.pixel = new char[height][width];
+    this.width = width;
+    this.height = height;
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+	this.pixel[i][j] = shades[0];
       }
     }
   }
@@ -40,7 +37,6 @@ public class AsciiImage {
   //image.
   public AsciiImage(Image image, int maxDimension) {
     Image ascii = new Image(image);
-    this.pixel = new char[ascii.getWidth()][ascii.getHeight()];
     
     //Loop activates if 'ascii' is not within acceptable maxDimension
     while (ascii.getWidth() > maxDimension || ascii.getHeight() > maxDimension) {
@@ -49,40 +45,36 @@ public class AsciiImage {
       ascii.shrink();
     }
     
-    //Determines the shade of the pixel and assigns it an appropriate ASCII
-    //representation
-    for (int i = 0; i < ascii.getWidth(); i++) {
-      for (int j = 0; j < ascii.getHeight(); j++) {
-	this.pixel[i][j] = this.shades[ascii.getPixel(i, j) / 255 * (this.shades.length - 1)];
-	/*Debugging*/ System.out.println("pixel[" + i + "][" + j + "]: " + this.pixel[i][j]);
-      }
-    }
-    
-    //Sets the width and height variables
     this.width = ascii.getWidth();
     this.height = ascii.getHeight();
+    this.pixel = new char[this.height][this.width];
     
+    //Determines the shade of the pixel and assigns it an appropriate ASCII
+    //representation
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+	this.pixel[i][j] = shades[(int)(ascii.getPixel(i, j) / (255 / (shades.length - 1)))];
+      }
+    }
   }
   
   //Constructor called when only an Image is passed, with no declared
   //max dimensions. It does the same thing as the above constructor with
   //max dimensions, it just doesn't shrink it.
   public AsciiImage(Image image) {
+    //Declare necessary variables
     Image ascii = new Image(image);
-    this.pixel = new char[ascii.getWidth()][ascii.getHeight()];
+    this.width = ascii.getWidth();
+    this.height = ascii.getHeight();
+    this.pixel = new char[this.height][this.width];
     
     //Determines the shade of the pixel and assigns it an appropriate ASCII
     //representation
-    for (int i = 0; i < ascii.getWidth(); i++) {
-      for (int j = 0; j < ascii.getHeight(); j++) {
-	this.pixel[i][j] = this.shades[ascii.getPixel(i, j) / 255 * (this.shades.length - 1)];
-	/*Debugging*/ System.out.println("pixel[" + i + "][" + j + "]: " + this.pixel[i][j]);
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+	this.pixel[i][j] = shades[(int) (ascii.getPixel(i, j) / (255 / (shades.length - 1)))];
       }
     }
-    
-    //Sets the width and height variables
-    this.width = ascii.getWidth();
-    this.height = ascii.getHeight();
   }
   
   
@@ -111,24 +103,6 @@ public class AsciiImage {
   //Changes the value of the pixel (represented by an Ascii character -
   //see shade array) to the value passed.
   public void setPixel(int row, int col, char value) {
-    //Check to ensure char value is a valid value that can be used
-    /*for(int i = 0; i < shades.length; i++) {
-      if(value == shades[i]) {
-	//Check to ensure row and col are within a valid bound
-	if(row < 0 || row > this.width) {
-	  return;
-	}
-	else if(col < 0 || row > this.height) {
-	  return;
-	}
-	//Finally, set the pixel if nothing fails
-	else {
-	  this.pixel[row][col] = value;
-	  return;
-	}
-      }
-    }*/
-    
     pixel[row][col] = value;
   }
   
@@ -136,52 +110,34 @@ public class AsciiImage {
     /****************
     *Other Functions*
     *****************/
+  
+  //Converts an AsciiImage type object into a Image type object. Will be
+  //very lossy.
   public Image getImage() {
-    //Image justToGetThisToCompile = new Image(this.width, this.height);
-    //return justToGetThisToCompile;
     Image newImage = new Image(this.width, this.height);
     
-    for (int i = 0; i < this.width; i++) {
-      for (int j = 0; j < this.height; j++) {
-	for(int k = 0; k < this.shades.length; k++) {
-	  if (shades[k] == this.getPixel(i, j)) {
-	    newImage.setPixel(i, j, ((k * 255) / (this.shades.length -1 )));
-	  }
-	}
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+		int m = 0;
+		for(int k = 0; k < shades.length; k++) {
+	  		if (shades[k] == this.pixel[i][j]) {
+	    		m = k;
+	  		}
+		}
+		newImage.setPixel(i, j, (int)(m * 255 / (shades.length - 1 )));
       }
     }
     
     return newImage;
   }
   
+  //Returns the ASCII representation as a string.
   public String toString() {
-    String asciiString = "";
-    /*Debugging:*/ //System.out.println("toString executing.");
-    for (int i = 0; i < this.width; i++) {
-      for(int j = 0; j < this.height; j++) {
-	asciiString = asciiString + this.getPixel(i, j);
-	/*Debugging:*/ //System.out.println("asciiString in for loop.");
-      }
-      /*Debugging:*///System.out.println("asciiString so far:\n" + asciiString);
-      asciiString += "\n";
+    StringBuilder asciiString = new StringBuilder(this.width * this.height + this.height);
+    for (int i = 0; i < this.height; i++) {
+      asciiString = asciiString.append(this.pixel[i]).append("\n");
     }
-    return asciiString;
-  }
-  
-  
-  
-  /*********************************************************
-  *Main - Used for Testing/Debugging. Should not be called.*
-  **********************************************************/
-  public static void main (String[] args) {
-    //This is just for testing and should not be called by other processes.
-    System.out.println("Debugging:");
-    int height = 10;
-    int width = 10;
-    Image debugImage = new Image(height, width);
-    AsciiImage debugtest = new AsciiImage(debugImage);
-    System.out.println("toString returns: " + debugtest.toString());
-    System.out.println("getPixel(5, 5) returns: " + debugtest.getPixel(5, 5));
+    return asciiString.toString();
   }
 
 }
