@@ -7,12 +7,31 @@ import java.awt.*;
 import javax.swing.*;
 
 public class AsciiConvert extends JFrame {
+  /**********
+  *Variables*
+  ***********/
+  ImageViewer image;
+  AsciiViewer ascii;
+  
+  
+  /************
+  *Constructor*
+  *************/
   public AsciiConvert() {
+    Image pic = loadJPEG("test.jpg");
+    image = new ImageViewer(pic);
+    ascii = new AsciiViewer(pic);
     
+    setLayout(new FlowLayout());
+    add(image);
+    add(ascii);
   }
   
   
-  public static void main(String]] args) {
+  /*****
+  *Main*
+  ******/
+  public static void main(String[] args) {
     AsciiConvert window = new AsciiConvert();
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     window.pack();
