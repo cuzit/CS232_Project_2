@@ -1,5 +1,6 @@
 Ascii Image Converter Version 1.0
-By: Matt Silvey, Tyler Hughes, Crystal Williams, Jackie, and Aaron Rudolph
+By: Matt Silvey, Tyler Hughes, Crystal 
+Williams, Jackie Blue, and Aaron Rudolph
 CS232 Dr. Garrett Project 2
 
 Contents:
@@ -49,4 +50,4 @@ Matt Silvey - Group leader, AsciiImage.java, parts of the Main
 Tyler Hughes - AsciiViewer.java, most of the Main
 Crystal Williams - ImageViewer.java, part of the Main
 Aaron Rudolph - AsciiViewer.java
-Jackie - Image.java
+Jackie Blue - Image.java
