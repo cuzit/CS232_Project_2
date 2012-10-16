@@ -14,7 +14,6 @@ public class Project2 extends JFrame
 	/**********
 	*Variables*
 	***********/
-	private ImageUtilities imageUtil;
 	private ImageViewer imageViewer;
 	private AsciiViewer asciiViewer;
 	private JSlider zoomSlider;
@@ -24,7 +23,6 @@ public class Project2 extends JFrame
 	*************/
 	public Project2(Image image)
 	{
-		imageUtil = new ImageUtilities();
 		imageViewer = new ImageViewer(image);
 		asciiViewer = new AsciiViewer(new AsciiImage(image));
 		zoomSlider = new JSlider(SwingConstants.VERTICAL, 1, 10, 1);
